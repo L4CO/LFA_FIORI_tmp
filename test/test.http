@@ -1,0 +1,5 @@
+GET http://localhost:4004/browse_STR_TotalCommitment/TotalCommitment
+
+GET http://localhost:4004/browse_STR_TotalCommitmentView/TotalCommitmentView?$apply=groupby((BUSINESSPARTNERID,GIVENNAME,LASTNAME),aggregate(NOMINALAMOUNT%20with%20sum%20as%20TotalAmount))
+
+GET http://localhost:4004/browse_STR_TotalCommitmentView/TotalCommitmentView?$apply=groupby((BUSINESSPARTNERID,GIVENNAME,LASTNAME),aggregate(NOMINALAMOUNT%20with%20sum%20as%20TOTALS,$count%20as%20CONTRACTCOUNT))

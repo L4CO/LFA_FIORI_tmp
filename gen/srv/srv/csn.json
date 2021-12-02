@@ -1,0 +1,528 @@
+{
+  "namespace": "my.fsdm",
+  "definitions": {
+    "my.fsdm.BusinessPartnerFasade": {
+      "kind": "entity",
+      "elements": {
+        "BUSINESSPARTNERID": {
+          "key": true,
+          "type": "cds.String",
+          "length": 128
+        },
+        "BUSINESSVALIDFROM": {
+          "key": true,
+          "type": "cds.Date"
+        },
+        "BUSINESSVALIDTO": {
+          "key": true,
+          "type": "cds.Date"
+        },
+        "SYSTEMVALIDFROM": {
+          "key": true,
+          "type": "cds.Timestamp"
+        },
+        "SYSTEMVALIDTO": {
+          "type": "cds.Timestamp"
+        },
+        "DATEOFBIRTH": {
+          "type": "cds.Date"
+        },
+        "GIVENNAME": {
+          "type": "cds.String",
+          "length": 60
+        },
+        "LASTNAME": {
+          "type": "cds.String",
+          "length": 60
+        },
+        "NAME": {
+          "type": "cds.String",
+          "length": 256
+        }
+      }
+    },
+    "my.fsdm.FinancialContractFasade": {
+      "kind": "entity",
+      "elements": {
+        "FINANCIALCONTRACTID": {
+          "key": true,
+          "type": "cds.String",
+          "length": 128
+        },
+        "IDSYSTEM": {
+          "key": true,
+          "type": "cds.String",
+          "length": 40
+        },
+        "BUSINESSVALIDFROM": {
+          "type": "cds.Date"
+        },
+        "BUSINESSVALIDTO": {
+          "type": "cds.Date"
+        },
+        "SYSTEMVALIDFROM": {
+          "type": "cds.Timestamp"
+        },
+        "SYSTEMVALIDTO": {
+          "type": "cds.Timestamp"
+        },
+        "EXPECTEDMATURITYDATE": {
+          "type": "cds.Date"
+        },
+        "NOMINALAMOUNTCURRENCY": {
+          "type": "cds.String",
+          "length": 3
+        },
+        "NOMINALAMOUNT": {
+          "type": "cds.String",
+          "length": 50
+        },
+        "ORIGINALSIGNINGDATE": {
+          "type": "cds.Date"
+        }
+      }
+    },
+    "my.fsdm.BpContractAssignmentFasade": {
+      "kind": "entity",
+      "elements": {
+        "ROLEFASADE": {
+          "type": "cds.String",
+          "length": 50
+        },
+        "FINANCIALCONTRACTID": {
+          "key": true,
+          "type": "cds.String",
+          "length": 128
+        },
+        "IDSYSTEM": {
+          "type": "cds.String",
+          "length": 40
+        },
+        "BUSINESSPARTNERID": {
+          "key": true,
+          "type": "cds.String",
+          "length": 128
+        },
+        "BUSINESSVALIDFROM": {
+          "type": "cds.Date"
+        },
+        "BUSINESSVALIDTO": {
+          "type": "cds.Date"
+        },
+        "SYSTEMVALIDFROM": {
+          "type": "cds.Timestamp"
+        },
+        "SYSTEMVALIDTO": {
+          "type": "cds.Timestamp"
+        }
+      }
+    },
+    "my.fsdm.ContractAssignmentToFinancialContract": {
+      "kind": "entity",
+      "query": {
+        "SELECT": {
+          "from": {
+            "join": "inner",
+            "args": [
+              {
+                "ref": [
+                  "my.fsdm.BpContractAssignmentFasade"
+                ]
+              },
+              {
+                "ref": [
+                  "my.fsdm.FinancialContractFasade"
+                ]
+              }
+            ],
+            "on": [
+              {
+                "ref": [
+                  "BpContractAssignmentFasade",
+                  "FINANCIALCONTRACTID"
+                ]
+              },
+              "=",
+              {
+                "ref": [
+                  "FinancialContractFasade",
+                  "FINANCIALCONTRACTID"
+                ]
+              }
+            ]
+          },
+          "columns": [
+            {
+              "ref": [
+                "BpContractAssignmentFasade",
+                "BUSINESSPARTNERID"
+              ]
+            },
+            {
+              "ref": [
+                "FinancialContractFasade",
+                "FINANCIALCONTRACTID"
+              ]
+            },
+            {
+              "ref": [
+                "FinancialContractFasade",
+                "NOMINALAMOUNT"
+              ]
+            },
+            {
+              "ref": [
+                "FinancialContractFasade",
+                "NOMINALAMOUNTCURRENCY"
+              ]
+            }
+          ]
+        }
+      },
+      "elements": {
+        "BUSINESSPARTNERID": {
+          "type": "cds.String",
+          "length": 128
+        },
+        "FINANCIALCONTRACTID": {
+          "type": "cds.String",
+          "length": 128
+        },
+        "NOMINALAMOUNT": {
+          "type": "cds.String",
+          "length": 50
+        },
+        "NOMINALAMOUNTCURRENCY": {
+          "type": "cds.String",
+          "length": 3
+        }
+      }
+    },
+    "my.fsdm.TotalCommitment": {
+      "kind": "entity",
+      "query": {
+        "SELECT": {
+          "from": {
+            "join": "left",
+            "args": [
+              {
+                "ref": [
+                  "my.fsdm.BusinessPartnerFasade"
+                ]
+              },
+              {
+                "ref": [
+                  "my.fsdm.TotalCommitmentAdd"
+                ]
+              }
+            ],
+            "on": [
+              {
+                "ref": [
+                  "BusinessPartnerFasade",
+                  "BUSINESSPARTNERID"
+                ]
+              },
+              "=",
+              {
+                "ref": [
+                  "TotalCommitmentAdd",
+                  "BUSINESSPARTNERID"
+                ]
+              }
+            ]
+          },
+          "columns": [
+            {
+              "ref": [
+                "BusinessPartnerFasade",
+                "BUSINESSPARTNERID"
+              ],
+              "as": "BUSINESSPARTNERID"
+            },
+            {
+              "ref": [
+                "BusinessPartnerFasade",
+                "NAME"
+              ]
+            },
+            {
+              "ref": [
+                "TotalCommitmentAdd",
+                "FINANCIALCONTRACT_COUNT"
+              ]
+            },
+            {
+              "ref": [
+                "TotalCommitmentAdd",
+                "TOTAL"
+              ]
+            },
+            {
+              "ref": [
+                "TotalCommitmentAdd",
+                "CURRENCY"
+              ]
+            }
+          ]
+        }
+      },
+      "elements": {
+        "BUSINESSPARTNERID": {
+          "type": "cds.String",
+          "length": 128
+        },
+        "NAME": {
+          "type": "cds.String",
+          "length": 256
+        },
+        "FINANCIALCONTRACT_COUNT": {
+          "type": "cds.String",
+          "length": 20
+        },
+        "TOTAL": {
+          "type": "cds.String",
+          "length": 50
+        },
+        "CURRENCY": {
+          "type": "cds.String",
+          "length": 3
+        }
+      }
+    },
+    "my.fsdm.TotalCommitmentAdd": {
+      "kind": "entity",
+      "elements": {
+        "BUSINESSPARTNERID": {
+          "key": true,
+          "type": "cds.String",
+          "length": 128
+        },
+        "FINANCIALCONTRACT_COUNT": {
+          "type": "cds.String",
+          "length": 20
+        },
+        "TOTAL": {
+          "type": "cds.String",
+          "length": 50
+        },
+        "CURRENCY": {
+          "type": "cds.String",
+          "length": 3
+        }
+      }
+    },
+    "FSDM_raw_data": {
+      "@source": "srv/lfa_showcase.cds",
+      "kind": "service",
+      "@path": "/browse_FSDM_raw_data"
+    },
+    "FSDM_raw_data.BusinessPartnerFasade": {
+      "kind": "entity",
+      "projection": {
+        "from": {
+          "ref": [
+            "my.fsdm.BusinessPartnerFasade"
+          ]
+        }
+      },
+      "elements": {
+        "BUSINESSPARTNERID": {
+          "key": true,
+          "type": "cds.String",
+          "length": 128
+        },
+        "BUSINESSVALIDFROM": {
+          "key": true,
+          "type": "cds.Date"
+        },
+        "BUSINESSVALIDTO": {
+          "key": true,
+          "type": "cds.Date"
+        },
+        "SYSTEMVALIDFROM": {
+          "key": true,
+          "type": "cds.Timestamp"
+        },
+        "SYSTEMVALIDTO": {
+          "type": "cds.Timestamp"
+        },
+        "DATEOFBIRTH": {
+          "type": "cds.Date"
+        },
+        "GIVENNAME": {
+          "type": "cds.String",
+          "length": 60
+        },
+        "LASTNAME": {
+          "type": "cds.String",
+          "length": 60
+        },
+        "NAME": {
+          "type": "cds.String",
+          "length": 256
+        }
+      }
+    },
+    "FSDM_raw_data.FinancialContractFasade": {
+      "kind": "entity",
+      "projection": {
+        "from": {
+          "ref": [
+            "my.fsdm.FinancialContractFasade"
+          ]
+        }
+      },
+      "elements": {
+        "FINANCIALCONTRACTID": {
+          "key": true,
+          "type": "cds.String",
+          "length": 128
+        },
+        "IDSYSTEM": {
+          "key": true,
+          "type": "cds.String",
+          "length": 40
+        },
+        "BUSINESSVALIDFROM": {
+          "type": "cds.Date"
+        },
+        "BUSINESSVALIDTO": {
+          "type": "cds.Date"
+        },
+        "SYSTEMVALIDFROM": {
+          "type": "cds.Timestamp"
+        },
+        "SYSTEMVALIDTO": {
+          "type": "cds.Timestamp"
+        },
+        "EXPECTEDMATURITYDATE": {
+          "type": "cds.Date"
+        },
+        "NOMINALAMOUNTCURRENCY": {
+          "type": "cds.String",
+          "length": 3
+        },
+        "NOMINALAMOUNT": {
+          "type": "cds.String",
+          "length": 50
+        },
+        "ORIGINALSIGNINGDATE": {
+          "type": "cds.Date"
+        }
+      }
+    },
+    "FSDM_raw_data.BpContractAssignmentFasade": {
+      "kind": "entity",
+      "projection": {
+        "from": {
+          "ref": [
+            "my.fsdm.BpContractAssignmentFasade"
+          ]
+        }
+      },
+      "elements": {
+        "ROLEFASADE": {
+          "type": "cds.String",
+          "length": 50
+        },
+        "FINANCIALCONTRACTID": {
+          "key": true,
+          "type": "cds.String",
+          "length": 128
+        },
+        "IDSYSTEM": {
+          "type": "cds.String",
+          "length": 40
+        },
+        "BUSINESSPARTNERID": {
+          "key": true,
+          "type": "cds.String",
+          "length": 128
+        },
+        "BUSINESSVALIDFROM": {
+          "type": "cds.Date"
+        },
+        "BUSINESSVALIDTO": {
+          "type": "cds.Date"
+        },
+        "SYSTEMVALIDFROM": {
+          "type": "cds.Timestamp"
+        },
+        "SYSTEMVALIDTO": {
+          "type": "cds.Timestamp"
+        }
+      }
+    },
+    "FSDM_raw_data.AssignmentToContract": {
+      "kind": "entity",
+      "projection": {
+        "from": {
+          "ref": [
+            "my.fsdm.ContractAssignmentToFinancialContract"
+          ]
+        }
+      },
+      "elements": {
+        "BUSINESSPARTNERID": {
+          "type": "cds.String",
+          "length": 128
+        },
+        "FINANCIALCONTRACTID": {
+          "type": "cds.String",
+          "length": 128
+        },
+        "NOMINALAMOUNT": {
+          "type": "cds.String",
+          "length": 50
+        },
+        "NOMINALAMOUNTCURRENCY": {
+          "type": "cds.String",
+          "length": 3
+        }
+      }
+    },
+    "TotalCommitment": {
+      "@source": "srv/lfa_showcase.cds",
+      "kind": "service",
+      "@path": "/browse_STR_TotalCommitment"
+    },
+    "TotalCommitment.TotalCommitment": {
+      "kind": "entity",
+      "projection": {
+        "from": {
+          "ref": [
+            "my.fsdm.TotalCommitment"
+          ]
+        }
+      },
+      "elements": {
+        "BUSINESSPARTNERID": {
+          "type": "cds.String",
+          "length": 128
+        },
+        "NAME": {
+          "type": "cds.String",
+          "length": 256
+        },
+        "FINANCIALCONTRACT_COUNT": {
+          "type": "cds.String",
+          "length": 20
+        },
+        "TOTAL": {
+          "type": "cds.String",
+          "length": 50
+        },
+        "CURRENCY": {
+          "type": "cds.String",
+          "length": 3
+        }
+      }
+    }
+  },
+  "meta": {
+    "creator": "CDS Compiler v2.10.4",
+    "flavor": "inferred"
+  },
+  "$version": "2.0"
+}

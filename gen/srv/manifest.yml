@@ -1,0 +1,8 @@
+---
+applications:
+  - name: FSDM_01_LFA_CAP-srv
+    path: .
+    memory: 256M
+    buildpacks:
+      - nodejs_buildpack
+    services:
